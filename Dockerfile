@@ -60,7 +60,7 @@ RUN wget -q -O models/pulid/pulid_flux_v0.9.1.safetensors \
     "https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors"
 
 # Download LoRA from CivitAI
-ARG CIVITAI_TOKEN
+ARG CIVITAI_TOKEN=2e9070f392c2365690954ed44def8fc4
 RUN curl -L -o models/loras/SoftLineart.safetensors \
     "https://civitai.com/api/download/models/2323899?type=Model&format=SafeTensor&token=${CIVITAI_TOKEN}"
 
