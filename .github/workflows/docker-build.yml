@@ -8,6 +8,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Free Disk Space
+        uses: AdityaGarg8/remove-unwanted-software@v4
+        with:
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+
       - name: Checkout code
         uses: actions/checkout@v4
 
