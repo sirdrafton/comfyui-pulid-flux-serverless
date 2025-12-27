@@ -41,23 +41,30 @@ download_if_missing "https://huggingface.co/guozinan/PuLID/resolve/main/pulid_fl
 
 curl_download_if_missing "https://civitai.com/api/download/models/2323899?type=Model&format=SafeTensor&token=2e9070f392c2365690954ed44def8fc4" "/comfyui/models/loras/SoftLineart.safetensors"
 
-# InsightFace models - download and verify
+# InsightFace models - download and extract correctly
 if [ ! -f "/root/.insightface/models/antelopev2/scrfd_10g_bnkps.onnx" ]; then
     echo "Downloading InsightFace models..."
-    mkdir -p /root/.insightface/models/antelopev2
-    mkdir -p /comfyui/models/insightface/models/antelopev2
-    cd /root/.insightface/models/antelopev2
+    mkdir -p /root/.insightface/models
+    mkdir -p /comfyui/models/insightface/models
+    cd /root/.insightface/models
     wget -q "https://huggingface.co/MonsterMMORPG/tools/resolve/main/antelopev2.zip"
     unzip -o antelopev2.zip
     rm antelopev2.zip
-    # Verify extraction
-    if [ ! -f "scrfd_10g_bnkps.onnx" ]; then
-        echo "ERROR: InsightFace models failed to extract properly"
-        ls -la
+    
+    # Check where files ended up
+    echo "Checking extraction..."
+    ls -la /root/.insightface/models/
+    ls -la /root/.insightface/models/antelopev2/
+    
+    # Verify the detection model exists
+    if [ ! -f "/root/.insightface/models/antelopev2/scrfd_10g_bnkps.onnx" ]; then
+        echo "ERROR: InsightFace models not in expected location"
+        find /root/.insightface -name "*.onnx" 2>/dev/null
         exit 1
     fi
-    # Copy to comfyui location too
-    cp -r /root/.insightface/models/antelopev2/* /comfyui/models/insightface/models/antelopev2/
+    
+    # Copy to comfyui location
+    cp -r /root/.insightface/models/antelopev2 /comfyui/models/insightface/models/
     cd /
     echo "InsightFace models installed successfully"
 else
